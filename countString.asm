@@ -1,33 +1,23 @@
 section .data
-    text db "Hello world!", 0       ; null-terminated string
-
-section .bss
-    ; nothing needed
+    text db "Hello world!", 0
 
 section .text
     global _start
 
-; -----------------------------------------
-; int count_chars(const char *str)
-; ECX = count
-; -----------------------------------------
-
 _start:
-    mov esi, text       ; esi = pointer to string
-    xor ecx, ecx        ; ecx = count = 0
+    mov rsi, text       ; pointer to string
+    xor rcx, rcx        ; counter = 0
 
 count_loop:
-    mov al, [esi]       ; load character into AL
-    cmp al, 0           ; is it the null terminator?
-    je done             ; yes -> exit loop
+    mov al, [rsi]
+    cmp al, 0
+    je done
 
-    inc ecx             ; count++
-    inc esi             ; move to next char
-    jmp count_loop      ; repeat loop
+    inc rcx
+    inc rsi
+    jmp count_loop
 
 done:
-    ; ECX contains the length (same as C return value)
-
-    ; exit program
-    mov eax, 1          ; sys_exit
-    int 0x80
+    mov rax, 60         ; sys_exit
+    xor rdi, rdi        ; exit code = 0
+    syscall
